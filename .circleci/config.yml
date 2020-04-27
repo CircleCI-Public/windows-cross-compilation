@@ -12,6 +12,6 @@ jobs:
     steps:
       # Commands are run in a Windows virtual machine environment
       - checkout
-      - run: go build src/main.go -o hello-world-windows
-      - run: $env:GOOS="darwin"  $env:GOARCH="amd64" go build src/main.go -o helloworld-mac
-      - run: $env:GOOS="linux"  $env:GOARCH="amd64" go build src/main.go -o helloworld-linux
+      - run: go build -o hello-world-windows src/main.go
+      - run: $env:GOOS="darwin"  $env:GOARCH="amd64" go build  -o helloworld-mac src/main.go
+      - run: $env:GOOS="linux"  $env:GOARCH="amd64" go build -o helloworld-linux src/main.go
