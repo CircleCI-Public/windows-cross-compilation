@@ -37,13 +37,15 @@ jobs:
             GOARCH: amd64
       - run:
           name: file list
-          command: ls
+          command: |
+            ls
+            pwd
           shell: bash.exe
       - run:
           name: "Persist Artifacts" # Move our compiled binaries into a workspace.
           command: |
             set -exu
-            mkdir -p /tmp/workspace/bin/
+            mkdir -p /tmp/workspace/bin
             mv hello-world-mac  /tmp/workspace/bin
             mv hello-world-linux  /tmp/workspace/bin
             mv hello-world-windows  /tmp/workspace/bin
@@ -70,3 +72,10 @@ jobs:
             ls -la
 
 workflows:
+  version: 2
+  build-distribute:
+    jobs:
+      - build
+      - mac:
+        requires:
+          - build
