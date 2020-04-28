@@ -16,6 +16,7 @@ jobs:
     executor:
       name: win/default # executor type
       size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
+      shell: bash.exe
 
     steps:
       # Commands are run in a Windows virtual machine environment
@@ -35,6 +36,10 @@ jobs:
             GOOS: linux
             GOARCH: amd64
       - run:
+          name: file list
+          command: ls
+          shell: bash.exe
+      - run:
           name: "Persist Artifacts" # Move our compiled binaries into a workspace.
           command: |
             set -exu
@@ -42,6 +47,7 @@ jobs:
             mv hello-world-mac  /tmp/workspace/bin
             mv hello-world-linux  /tmp/workspace/bin
             mv hello-world-windows  /tmp/workspace/bin
+          shell: bash.exe
       - persist_to_workspace: # store the built files into the workspace for other jobs.
           root: *workspace_root
           paths:
