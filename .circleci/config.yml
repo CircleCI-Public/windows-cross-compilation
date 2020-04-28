@@ -70,6 +70,8 @@ jobs:
             set -exu
             mkdir -p tmp/workspace/bin
             ls -la
+            mv /tmp/workspace/bin/* tmp/workspace/bin
+            ./hello-world-mac
 
 workflows:
   version: 2
