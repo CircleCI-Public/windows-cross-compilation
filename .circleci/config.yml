@@ -73,9 +73,9 @@ jobs:
 
 workflows:
   version: 2
-  build-distribute:
+  build-multiplatform:
     jobs:
       - build
       - mac:
-        requires:
-          - build
+          requires:
+            - build
