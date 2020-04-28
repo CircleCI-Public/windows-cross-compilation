@@ -51,7 +51,7 @@ jobs:
             mv hello-world-windows  /tmp/workspace/bin
           shell: bash.exe
       - persist_to_workspace: # store the built files into the workspace for other jobs.
-          root: *workspace_root
+          root: /tmp/workspace
           paths:
             - bin
 
