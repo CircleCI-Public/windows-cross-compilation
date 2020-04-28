@@ -46,12 +46,12 @@ jobs:
           command: |
             set -exu
             mkdir -p /tmp/workspace/bin
-            mv hello-world-mac  /tmp/workspace/bin
-            mv hello-world-linux  /tmp/workspace/bin
-            mv hello-world-windows  /tmp/workspace/bin
+            mv hello-world-mac  tmp/workspace/bin
+            mv hello-world-linux  tmp/workspace/bin
+            mv hello-world-windows  tmp/workspace/bin
           shell: bash.exe
       - persist_to_workspace: # store the built files into the workspace for other jobs.
-          root: /tmp/workspace
+          root: tmp/workspace
           paths:
             - bin
 
@@ -68,7 +68,7 @@ jobs:
           name: Restore workspace on mac.
           command: |
             set -exu
-            mkdir -p /tmp/workspace/bin
+            mkdir -p tmp/workspace/bin
             ls -la
 
 workflows:
