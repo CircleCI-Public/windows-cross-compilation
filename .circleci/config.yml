@@ -46,12 +46,12 @@ jobs:
           command: |
             set -exu
             mkdir -p /tmp/workspace/bin
-            mv hello-world-mac  tmp/workspace/bin
-            mv hello-world-linux  tmp/workspace/bin
-            mv hello-world-windows  tmp/workspace/bin
+            mv hello-world-mac      /tmp/workspace/bin/
+            mv hello-world-linux    /tmp/workspace/bin/
+            mv hello-world-windows  /tmp/workspace/bin/
           shell: bash.exe
       - persist_to_workspace: # store the built files into the workspace for other jobs.
-          root: tmp/workspace
+          root: /tmp/workspace
           paths:
             - bin
 
@@ -61,17 +61,15 @@ jobs:
       xcode: 11.3.0 # indicate our selected version of Xcode
     steps: # a series of commands to run
       - checkout  # pull down code from your version control system.
-      - store_artifacts: # store this build output. Read more: https://circleci.com/docs/2.0/artifacts/
-          path: app.zip
-          destination: app
       - run:
           name: Restore workspace on mac.
           command: |
-            set -exu
-            mkdir -p tmp/workspace/bin
+            # set -exu
+            # mkdir -p tmp/workspace/bin
+            cd /tmp/workspace
             ls -la
-            mv /tmp/workspace/bin/* tmp/workspace/bin
-            ./hello-world-mac
+            # mv /tmp/workspace/bin/* tmp/workspace/bin
+            # ./hello-world-mac
 
 workflows:
   version: 2
