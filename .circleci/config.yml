@@ -27,9 +27,9 @@ jobs:
       - run:
           name: Move compiled binaries into the temporary folder.
           command: |
-            Move-Item -Path .\hello-world-mac -Destination C:\tmp
-            Move-Item -Path .\hello-world-linux -Destination C:\tmp
-            Move-Item -Path .\hello-world-windows -Destination C:\tmp
+            Move-Item -Path .\hello-world-mac -Destination C:\tmp\bin
+            Move-Item -Path .\hello-world-linux -Destination C:\tmp\bin
+            Move-Item -Path .\hello-world-windows -Destination C:\tmp\bin
       - persist_to_workspace:
           root: C:\tmp
           paths:
@@ -47,7 +47,7 @@ jobs:
           command: |
             echo "------ workspace tmp is ----------"
             cd /tmp/bin
-            echo "looking for binaries"
+           echo "looking for binaries"
             ls -la
 
 workflows:
