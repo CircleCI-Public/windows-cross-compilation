@@ -45,10 +45,13 @@ jobs:
       - run:
           name: Look at workspace
           command: |
-            echo "------ workspace tmp is ----------"
+            echo "workspace results are ------------------------"
             cd /tmp/bin
-           echo "looking for binaries"
             ls -la
+           #  echo "------ workspace tmp is ----------"
+           #  cd /tmp/bin
+           # echo "looking for binaries"
+           #  ls -la
 
 workflows:
   version: 2
