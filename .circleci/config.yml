@@ -39,9 +39,9 @@ jobs:
             Move-Item -Path .\hello-world-linux -Destination C:\tmp
             Move-Item -Path .\hello-world-windows -Destination C:\tmp
       - persist_to_workspace:
-        root: C:\tmp
-        paths:
-          - bin
+          root: C:\tmp
+          paths:
+            - bin
 
 
 
