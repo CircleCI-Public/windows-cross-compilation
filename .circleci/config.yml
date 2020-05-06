@@ -46,15 +46,9 @@ jobs:
           name: Look at workspace
           command: |
             echo "------ workspace tmp is ----------"
-            ls -la /tmp
-            ls -la /tmp/bin
-            cd /tmp
-            ls
-            cd bin
-            ls
-
-            # cd /tmp/workspace
-            # ls -la
+            cd /tmp/bin
+            echo "looking for binaries"
+            ls -la
 
 workflows:
   version: 2
