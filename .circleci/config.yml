@@ -4,25 +4,21 @@ orbs:
   win: circleci/windows@2.2.0 # The Windows orb give you everything you need to start using the Windows executor.
 
 ## could these be commands?
-references:
-  workspace_root: &workspace_root
-    /tmp/workspace
-  attach_workspace: &attach_workspace
-    attach_workspace:
-      at: *workspace_root
+# references:
+#   workspace_root: &workspace_root
+#     /tmp/workspace
+#   attach_workspace: &attach_workspace
+#     attach_workspace:
+#       at: *workspace_root
 
 jobs:
-  build: # name of your job
+  windows-build:
     executor:
       name: win/default # executor type
       size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
-      shell: bash.exe
-
     steps:
-      # Commands are run in a Windows virtual machine environment
       - checkout
-      - *attach_workspace
-      - run: go build -o hello-world-windows src/main.go
+      - run: go build -o hello-world-windows src/main.go # build the go library.
       - run:
           name: Compile for Mac
           command: go build -o hello-world-mac src/main.go
@@ -35,25 +31,66 @@ jobs:
           environment:
             GOOS: linux
             GOARCH: amd64
+      - run: mkdir -p "C:\tmp\bin"
       - run:
-          name: file list
+          name: Move compiled binaries into the temporary folder.
           command: |
-            ls
-            pwd
-          shell: bash.exe
-      - run:
-          name: "Persist Artifacts" # Move our compiled binaries into a workspace.
-          command: |
-            set -exu
-            mkdir -p /tmp/workspace/bin
-            mv hello-world-mac      /tmp/workspace/bin/
-            mv hello-world-linux    /tmp/workspace/bin/
-            mv hello-world-windows  /tmp/workspace/bin/
-          shell: bash.exe
-      - persist_to_workspace: # store the built files into the workspace for other jobs.
-          root: /tmp/workspace
-          paths:
-            - bin
+            Move-Item -Path .\hello-world-mac -Destination C:\tmp
+            Move-Item -Path .\hello-world-linux -Destination C:\tmp
+            Move-Item -Path .\hello-world-windows -Destination C:\tmp
+      - persist_to_workspace:
+        root: C:\tmp
+        paths:
+          - bin
+
+
+
+  #           mv hello-world-mac      /tmp/workspace/bin/
+  #           mv hello-world-linux    /tmp/workspace/bin/
+  #           mv hello-world-windows  /tmp/workspace/bin/
+  
+  # build: # name of your job
+  #   executor:
+  #     name: win/default # executor type
+  #     size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
+  #     shell: bash.exe
+
+  #   steps:
+  #     # Commands are run in a Windows virtual machine environment
+  #     - checkout
+  #     - *attach_workspace
+  #     - run: go build -o hello-world-windows src/main.go
+  #     - run:
+  #         name: Compile for Mac
+  #         command: go build -o hello-world-mac src/main.go
+  #         environment:
+  #           GOOS: darwin
+  #           GOARCH: amd64
+  #     - run:
+  #         name: Compile for Linux
+  #         command: go build -o hello-world-linux src/main.go
+  #         environment:
+  #           GOOS: linux
+  #           GOARCH: amd64
+  #     - run:
+  #         name: file list
+  #         command: |
+  #           ls
+  #           pwd
+  #         shell: bash.exe
+  #     - run:
+  #         name: "Persist Artifacts" # Move our compiled binaries into a workspace.
+  #         command: |
+  #           set -exu
+  #           mkdir -p /tmp/workspace/bin
+  #           mv hello-world-mac      /tmp/workspace/bin/
+  #           mv hello-world-linux    /tmp/workspace/bin/
+  #           mv hello-world-windows  /tmp/workspace/bin/
+  #         shell: bash.exe
+  #     - persist_to_workspace: # store the built files into the workspace for other jobs.
+  #         root: /tmp/workspace
+  #         paths:
+  #           - bin
 
 
   mac:
@@ -61,21 +98,22 @@ jobs:
       xcode: 11.3.0 # indicate our selected version of Xcode
     steps: # a series of commands to run
       - checkout  # pull down code from your version control system.
+      - attach_workspace:
+          at: /tmp
       - run:
-          name: Restore workspace on mac.
+          name: Look at workspace
           command: |
-            # set -exu
-            # mkdir -p tmp/workspace/bin
-            cd /tmp/workspace
-            ls -la
-            # mv /tmp/workspace/bin/* tmp/workspace/bin
-            # ./hello-world-mac
+            echo " ------ workspace tmp is ----------"
+            ls -la /tmp
+            ls -la /tmp/bin
+            # cd /tmp/workspace
+            # ls -la
 
 workflows:
   version: 2
   build-multiplatform:
     jobs:
-      - build
+      - windows-build
       - mac:
           requires:
-            - build
+            - windows-build
