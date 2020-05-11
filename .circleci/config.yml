@@ -35,7 +35,7 @@ jobs:
           paths:
             - bin
 
-  mac:
+  mac-test:
     macos:  # indicate that we are using the macOS executor
       xcode: 11.3.0 # indicate our selected version of Xcode
     steps: # a series of commands to run
@@ -59,7 +59,7 @@ jobs:
               exit 1
             fi
 
-  linux-build:
+  linux-test:
     docker:
       - image: cimg/base:2020.01
     steps: # a series of commands to run
@@ -88,9 +88,9 @@ workflows:
   build-multiplatform:
     jobs:
       - windows-build
-      - linux-build:
+      - linux-test:
           requires:
             - windows-build
-      - mac:
+      - mac-test:
           requires:
             - windows-build
