@@ -3,5 +3,5 @@ import "fmt"
 import "runtime"
 
 func main() {
-	fmt.Println("Hello world from: ", runtime.GOOS)
+	fmt.Println("Hello world from:", runtime.GOOS)
 }

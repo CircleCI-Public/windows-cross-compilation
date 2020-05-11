@@ -48,10 +48,15 @@ jobs:
             echo "workspace results are ------------------------"
             cd /tmp/bin
             ls -la
-           #  echo "------ workspace tmp is ----------"
-           #  cd /tmp/bin
-           # echo "looking for binaries"
-           #  ls -la
+      - run:
+          name: Test OS X binary.
+          command: |
+            if ./hello-world-mac | grep -q 'Hello world from: darwin'; then
+              echo "Mac binary successfully run"\
+              exit
+            else
+              echo "Mac binary not successfully run"
+              exit 1
 
 workflows:
   version: 2
