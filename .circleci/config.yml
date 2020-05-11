@@ -43,9 +43,10 @@ jobs:
       - attach_workspace:
           at: /tmp
       - run:
-          name: View attached workspace results
+          name: View attached workspace results and make bins executable.
           command: |
             cd /tmp/bin
+            chmod +x ./hello-world-mac
             ls -la
       - run:
           name: Test OS X binary.
