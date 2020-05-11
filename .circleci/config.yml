@@ -39,7 +39,6 @@ jobs:
     macos:  # indicate that we are using the macOS executor
       xcode: 11.3.0 # indicate our selected version of Xcode
     steps: # a series of commands to run
-      - checkout  # pull down code from your version control system.
       - attach_workspace:
           at: /tmp
       - run:
@@ -60,11 +59,38 @@ jobs:
               exit 1
             fi
 
+  linux-build:
+    docker:
+      - image: cimg/base:2020.01
+    steps: # a series of commands to run
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: View attached workspace results and make bins executable.
+          command: |
+            cd /tmp/bin
+            chmod +x ./hello-world-linux
+            ls -la
+      - run:
+          name: Test Linux binary.
+          command: |
+            cd /tmp/bin
+            if ./hello-world-linux | grep -q 'Hello world from: linux'; then
+              echo "Linux binary successfully run"
+              exit
+            else
+              echo "Linux binary not successfully run"
+              exit 1
+            fi
+
 workflows:
   version: 2
   build-multiplatform:
     jobs:
       - windows-build
+      - linux-build:
+          requires:
+            - windows-build
       - mac:
           requires:
             - windows-build
