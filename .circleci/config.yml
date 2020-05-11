@@ -50,6 +50,7 @@ jobs:
       - run:
           name: Test OS X binary.
           command: |
+            cd /tmp/bin
             if ./hello-world-mac | grep -q 'Hello world from: darwin'; then
               echo "Mac binary successfully run"
               exit
